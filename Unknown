@@ -1,0 +1,80 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+// Recursion 
+int solve(int n){
+    if(n<=1)
+       return n;
+
+       return solve(n-1) + solve(n-2);
+}
+// top-down Approach
+// Rec + Mem  T.C = O(n) S.C = O(n) + O(n)
+// Step 1:create Dp array + pass the fun 
+// Step 2: Store the ans in Dp array 
+// Step3: Check if Dp array already has ans , if yes , then return ,just after Base case
+int solveMem(int n , vector<int> &dp){
+    if(n<=1)   
+       return n;
+
+    //    Step 3:
+     if(dp[n]!=-1)
+         return dp[n];
+
+         int ans = solveMem(n-1,dp) + solveMem(n-2,dp);
+//   Step 2
+    return dp[n] = ans;
+}
+// Bottom-Up approach  T.C = O(n)  S.C = O(n)
+// Step 1: Dp array creation
+// Step 2: Base case analysis of Rec code and update dp array accordingly
+// Step3: Find the range for the changing variable and copy paste the logic in rec code accordingly
+int solveTab(int nthTerm){
+    // step 1 : create dp array
+    vector<int> dp(nthTerm+1 , 0);
+    // step 2: Update dp array basis on Rec Base case
+    dp[0] = 0;
+    dp[1] = 1;
+    // step 3: find range and copy paste
+    for(int n=2;n<=nthTerm;n++){
+         int ans = dp[n-1] + dp[n-2];
+         dp[n] = ans;
+    }
+    return dp[nthTerm];
+}
+int solveTabSO(int nthTerm){
+    // step 1 :Replace Dp array with your optimised storage structures and remove Dp array creation and updation part
+    int prev1 = 1;
+    int prev2 = 0;
+    int curr;
+    // step 2: dp values -> replace -> prev1 , prev2
+    for(int n=2;n<=nthTerm;n++){
+        int ans = prev1 + prev2;
+        curr = ans;
+        // step 3 : Take care of movement and updation of prev1 and prev2
+        prev2 = prev1;
+        prev1=curr;
+    }
+    return curr;   
+}
+
+
+int main(){
+     int n;
+    cout << "Enter the value: " << endl;
+    cin >> n;
+    // cout << solve(n) << endl;
+    // step 1: For Rec + Mem 
+    // vector<int> dp(n+1,-1);
+    // int ans =  solveMem(n,dp);
+    // cout << ans << endl;
+    // For tabulation part
+//    int ans = solveTab(n);
+//    cout << ans << endl;
+//    For space optimisation
+int ans = solveTabSO(n);
+cout << ans << endl;
+
+    
+    return 0;
+}
